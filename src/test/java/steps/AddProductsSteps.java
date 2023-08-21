@@ -6,9 +6,10 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 
 public class AddProductsSteps extends BaseTest {
-    private String product1;
-    private String product2;
-    private String product3;
+    private String phone;
+    private String laptop;
+    private String monitor;
+    private String creditCard;
 
     @Given("I enters to the {string}")
     public void enterToTheWebsite(String title) {
@@ -17,14 +18,14 @@ public class AddProductsSteps extends BaseTest {
 
     @When("I want to add three products {string} {string} {string}")
     public void addProducts(String phone, String laptop, String monitor) throws Exception {
-        product1 = phone;
-        product2 = laptop;
-        product3 = monitor;
-
-        home.addProduct("Phones", phone);
-        home.clickHome();
+        this.phone = phone;
+        this.laptop = laptop;
+        this.monitor = monitor;
 
         home.addProduct("Laptops", laptop);
+        home.clickHome();
+
+        home.addProduct("Phones", phone);
         home.clickHome();
 
         home.addProduct("Monitors", monitor);
@@ -32,14 +33,14 @@ public class AddProductsSteps extends BaseTest {
     }
 
     @Then("I verify that I added {string} products")
-    public void verifyProducts(String qty) {
-        int qty1 = Integer.parseInt(qty);
-        Assert.assertEquals(checkout.getQuantityOfProducts(), qty1);
+    public void verifyProducts(String quantity) {
+        int qty = Integer.parseInt(quantity);
+        Assert.assertEquals(checkout.getQuantityOfProducts(), qty);
     }
 
     @Then("I confirm that I have added the products accurately")
     public void confirmProducts() {
-        Assert.assertEquals(checkout.getListOFAddedProducts(), checkout.sortListOfSelectedProducts(product1, product2, product3));
+        Assert.assertEquals(checkout.getListOFAddedProducts(), checkout.sortListOfSelectedProducts(phone, laptop, monitor));
     }
 
     @When("I delete a product {string}")
@@ -49,8 +50,13 @@ public class AddProductsSteps extends BaseTest {
 
     @When("I proceed to complete the checkout flow with the following information {string} {string} {string} {string} {string} {string}")
     public void checkoutProduct(String name, String country, String city, String creditCard, String month, String year) throws Exception {
+        this.creditCard= creditCard;
         checkout.clickBtnPlaceOrder();
         checkout.sendInfoForPlaceOrder(name, country, city, creditCard, month, year);
+    }
+
+    @When("I verify that the displayed card number is accurate")
+    public void verifyCreditCard() throws Exception {
         Assert.assertTrue(checkout.getTextCreditCard(creditCard));
     }
 }

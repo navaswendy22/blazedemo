@@ -16,13 +16,12 @@ Feature: Purchase in demoBlaze
     Then I verify that I added "2" products
 
 
-
   @test @placeOrder
   Scenario Outline: I want to complete the checkout process and ensure that the displayed card number matches.
     Given I enters to the "STORE"
     When I want to add three products "Samsung galaxy s6" "MacBook air" "Apple monitor 24"
     And I proceed to complete the checkout flow with the following information "<Name>" "<Country>" "<City>" "<Credit Card>" "<Month>" "<Year>"
-
+    Then I verify that the displayed card number is accurate
 
     Examples:
       | Name      | Country    |   City     | Credit Card             |   Month     | Year     |
